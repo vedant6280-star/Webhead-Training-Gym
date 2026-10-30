@@ -1,0 +1,657 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webhead Training | Phase 1</title>
+
+<style>
+:root {
+  --red: #f04444;
+  --blue: #2588ff;
+  --bg: #090c14;
+  --card: #141a27;
+  --text: #f4f6fc;
+  --muted: #a5aec1;
+  --green: #54dfa0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  padding: 32px 18px;
+  text-align: center;
+  background:
+    radial-gradient(circle at top, #263d68 0%, transparent 60%),
+    linear-gradient(135deg, #151a2b, #280d17);
+  border-bottom: 2px solid var(--red);
+}
+
+.logo {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  color: var(--red);
+}
+
+h1 {
+  font-size: clamp(30px, 8vw, 48px);
+  margin: 8px 0;
+  line-height: 1.15;
+}
+
+h1 span {
+  color: var(--red);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.container {
+  width: min(900px, 92%);
+  margin: 22px auto;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid #293246;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: 21px;
+  margin-top: 0;
+}
+
+h3 {
+  margin: 0 0 10px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.stat {
+  background: #101522;
+  padding: 12px 5px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 21px;
+  color: var(--blue);
+}
+
+.stat small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+button, select {
+  background: #202a3c;
+  color: var(--text);
+  border: 1px solid #3a4963;
+  border-radius: 9px;
+  padding: 11px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--red);
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.week-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.week-controls select {
+  flex: 1;
+  min-width: 130px;
+}
+
+.progress-track {
+  height: 10px;
+  background: #30394a;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), var(--blue));
+  transition: width .25s ease;
+}
+
+.day {
+  border: 1px solid #30394a;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 12px 0;
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.day-header h3 {
+  font-size: 16px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #253b60;
+  color: #8fc4ff;
+}
+
+.rest-tag {
+  background: #253c32;
+  color: var(--green);
+}
+
+.exercise {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid #293246;
+}
+
+.exercise:last-child {
+  border-bottom: none;
+}
+
+.exercise input {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  accent-color: var(--red);
+  flex-shrink: 0;
+}
+
+.exercise label {
+  cursor: pointer;
+  flex: 1;
+}
+
+.exercise small {
+  display: block;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.exercise input:checked + label {
+  color: var(--green);
+  text-decoration: line-through;
+}
+
+.note {
+  background: #17243a;
+  border-left: 3px solid var(--blue);
+  padding: 12px;
+  border-radius: 6px;
+  color: #d9e6ff;
+  font-size: 14px;
+}
+
+.warning {
+  border-left-color: var(--red);
+  background: #29191f;
+}
+
+ul.tips {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+ul.tips li {
+  margin-bottom: 8px;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 25px;
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: 15px;
+  }
+
+  .week-controls button {
+    padding: 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">YOUR FRIENDLY NEIGHBORHOOD GYM PLAN</div>
+  <h1>WEBHEAD <span>TRAINING</span></h1>
+  <p class="subtitle">PHASE 01 · BUILD THE FOUNDATION</p>
+  <p>Start light. Learn the moves. Build consistency.</p>
+
+  <div class="stats">
+    <div class="stat">
+      <strong>8</strong>
+      <small>WEEKS</small>
+    </div>
+    <div class="stat">
+      <strong>4</strong>
+      <small>GYM DAYS / WEEK</small>
+    </div>
+    <div class="stat">
+      <strong>BEGINNER</strong>
+      <small>TRAINING LEVEL</small>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="card">
+    <h2>📊 Your Training Dashboard</h2>
+
+    <div class="week-controls">
+      <button id="prevWeek">← Previous</button>
+
+      <select id="weekSelect" aria-label="Choose training week">
+        <option value="1">Week 1</option>
+        <option value="2">Week 2</option>
+        <option value="3">Week 3</option>
+        <option value="4">Week 4</option>
+        <option value="5">Week 5</option>
+        <option value="6">Week 6</option>
+        <option value="7">Week 7</option>
+        <option value="8">Week 8</option>
+      </select>
+
+      <button id="nextWeek">Next →</button>
+    </div>
+
+    <p id="phaseDescription">
+      Learn the machines and build your routine.
+    </p>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <strong id="progressText">0 of 4 training days completed</strong>
+    <p style="color:var(--muted);font-size:13px">
+      Your checkmarks are saved in this browser on this device.
+    </p>
+  </section>
+
+  <section class="card">
+    <h2>🕸️ Weekly Mission</h2>
+    <div id="schedule"></div>
+    <button class="primary" id="resetWeek">Reset this week's checkmarks</button>
+  </section>
+
+  <section class="card">
+    <h2>📈 The 8-Week Roadmap</h2>
+    <div class="exercise">
+      <div>🔹</div>
+      <div>
+        <strong>Weeks 1–2: Learn</strong>
+        <small>Practice correct technique with comfortable, light resistance.</small>
+      </div>
+    </div>
+    <div class="exercise">
+      <div>🔹</div>
+      <div>
+        <strong>Weeks 3–4: Adapt</strong>
+        <small>Increase walking time gradually. Add a second set only when ready.</small>
+      </div>
+    </div>
+    <div class="exercise">
+      <div>🔹</div>
+      <div>
+        <strong>Weeks 5–6: Build stamina</strong>
+        <small>Work toward 20–25 minutes of comfortable cardio if tolerated.</small>
+      </div>
+    </div>
+    <div class="exercise">
+      <div>🔹</div>
+      <div>
+        <strong>Weeks 7–8: Review</strong>
+        <small>Review consistency, stamina and technique before increasing difficulty.</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🛡️ Training Protocol</h2>
+    <ul class="tips">
+      <li>Warm up with 5 minutes of easy walking or cycling.</li>
+      <li>Ask a gym trainer to adjust machines and demonstrate safe technique.</li>
+      <li>Start with 1–2 sets of 10 comfortable repetitions per machine.</li>
+      <li>Rest 60–120 seconds between sets, or longer if needed.</li>
+      <li>Use a weight you can control without holding your breath.</li>
+      <li>Stop if you experience pain, dizziness or unusual breathlessness.</li>
+      <li>Eat regular, balanced meals, drink water and get enough sleep.</li>
+    </ul>
+
+    <div class="note warning">
+      <strong>Important:</strong> You are a beginner, so there is no need
+      to lift heavy or push through pain. Consistency matters more than
+      intensity. Avoid crash diets.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🏆 Your Mission Record</h2>
+    <p id="overallText">You've completed 0 training days so far.</p>
+    <button id="exportProgress">Export my progress</button>
+  </section>
+
+</main>
+
+<footer>
+  WEBHEAD TRAINING · PHASE 01<br>
+  Train smart. Recover well. Keep showing up. 🕷️
+</footer>
+
+<script>
+const workouts = [
+  {
+    day: "Monday",
+    title: "Full Body A",
+    type: "TRAIN",
+    exercises: [
+      ["Chest press machine", "1–2 sets × 10 reps"],
+      ["Lat pulldown machine", "1–2 sets × 10 reps"],
+      ["Leg press machine", "1–2 sets × 10 reps"],
+      ["Seated leg curl", "1–2 sets × 10 reps"],
+      ["Easy treadmill walk", "5–10 minutes"]
+    ]
+  },
+  {
+    day: "Tuesday",
+    title: "Cardio Day",
+    type: "CARDIO",
+    exercises: [
+      ["Treadmill walk or stationary bike", "15–20 minutes at a comfortable pace"]
+    ]
+  },
+  {
+    day: "Wednesday",
+    title: "Recovery Day",
+    type: "REST",
+    exercises: [
+      ["Optional easy walk", "Only if you feel comfortable"],
+      ["Recovery", "Relax, hydrate and get enough sleep"]
+    ]
+  },
+  {
+    day: "Thursday",
+    title: "Full Body B",
+    type: "TRAIN",
+    exercises: [
+      ["Chest press machine", "1–2 sets × 10 reps"],
+      ["Seated row machine", "1–2 sets × 10 reps"],
+      ["Leg press machine", "1–2 sets × 10 reps"],
+      ["Leg extension machine", "1 set × 10 reps"],
+      ["Easy cycling", "5–10 minutes"]
+    ]
+  },
+  {
+    day: "Friday",
+    title: "Rest Day",
+    type: "REST",
+    exercises: [
+      ["Recovery", "No structured workout required"],
+      ["Optional gentle walk", "Keep it easy"]
+    ]
+  },
+  {
+    day: "Saturday",
+    title: "Full Body C",
+    type: "TRAIN",
+    exercises: [
+      ["Lat pulldown machine", "1–2 sets × 10 reps"],
+      ["Chest press machine", "1–2 sets × 10 reps"],
+      ["Seated leg curl", "1–2 sets × 10 reps"],
+      ["Seated row machine", "1–2 sets × 10 reps"],
+      ["Easy treadmill walk", "5–10 minutes"]
+    ]
+  },
+  {
+    day: "Sunday",
+    title: "Reset & Recover",
+    type: "REST",
+    exercises: [
+      ["Rest", "Prepare for the next week"],
+      ["Check your progress", "Celebrate consistency, not perfection"]
+    ]
+  }
+];
+
+const phaseDescriptions = {
+  1: "Learn the machines and build your routine.",
+  2: "Repeat the basics. Prioritize comfortable technique.",
+  3: "If recovery is good, consider a second set on selected exercises.",
+  4: "Build consistency. Increase cardio gradually if comfortable.",
+  5: "Work toward slightly longer, easy cardio sessions.",
+  6: "Keep resistance controlled and technique consistent.",
+  7: "Notice improvements in stamina and confidence.",
+  8: "Review your progress and plan your next safe step."
+};
+
+const select = document.getElementById("weekSelect");
+const schedule = document.getElementById("schedule");
+
+let currentWeek = Number(localStorage.getItem("webheadWeek") || 1);
+select.value = currentWeek;
+
+function storageKey() {
+  return "webheadWeek" + currentWeek;
+}
+
+function getCompleted() {
+  try {
+    return JSON.parse(localStorage.getItem(storageKey()) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function render() {
+  currentWeek = Number(select.value);
+  localStorage.setItem("webheadWeek", currentWeek);
+
+  document.getElementById("phaseDescription").textContent =
+    phaseDescriptions[currentWeek];
+
+  const completed = getCompleted();
+  schedule.innerHTML = "";
+
+  workouts.forEach((workout, index) => {
+    const checked = completed.includes(index);
+    const day = document.createElement("article");
+    day.className = "day";
+
+    const header = document.createElement("div");
+    header.className = "day-header";
+
+    const heading = document.createElement("h3");
+    heading.textContent = workout.day + " — " + workout.title;
+
+    const tag = document.createElement("span");
+    tag.className = "tag" + (workout.type === "REST" ? " rest-tag" : "");
+    tag.textContent = workout.type;
+
+    header.append(heading, tag);
+    day.append(header);
+
+    workout.exercises.forEach((exercise, exerciseIndex) => {
+      const row = document.createElement("div");
+      row.className = "exercise";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `w${currentWeek}d${index}e${exerciseIndex}`;
+      checkbox.checked = checked;
+
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+      label.textContent = exercise[0];
+
+      const details = document.createElement("small");
+      details.textContent = exercise[1];
+      label.appendChild(details);
+
+      checkbox.addEventListener("change", () => {
+        let latest = getCompleted();
+
+        if (checkbox.checked && !latest.includes(index)) {
+          latest.push(index);
+        } else if (!checkbox.checked) {
+          latest = latest.filter(dayIndex => dayIndex !== index);
+        }
+
+        localStorage.setItem(storageKey(), JSON.stringify(latest));
+        render();
+      });
+
+      row.append(checkbox, label);
+      day.appendChild(row);
+    });
+
+    schedule.appendChild(day);
+  });
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const completed = getCompleted();
+  const totalTrainingDays = 4;
+  const completedTrainingDays = completed.filter(index =>
+    workouts[index].type !== "REST"
+  ).length;
+
+  const percent = Math.min(
+    100,
+    (completedTrainingDays / totalTrainingDays) * 100
+  );
+
+  document.getElementById("progressFill").style.width = percent + "%";
+  document.getElementById("progressText").textContent =
+    `${completedTrainingDays} of ${totalTrainingDays} training days completed`;
+
+  let overall = 0;
+
+  for (let week = 1; week <= 8; week++) {
+    try {
+      const days = JSON.parse(
+        localStorage.getItem("webheadWeek" + week) || "[]"
+      );
+
+      overall += days.filter(index =>
+        workouts[index] && workouts[index].type !== "REST"
+      ).length;
+    } catch {}
+  }
+
+  document.getElementById("overallText").textContent =
+    `You've completed ${overall} training days across all 8 weeks.`;
+}
+
+document.getElementById("prevWeek").addEventListener("click", () => {
+  select.value = Math.max(1, Number(select.value) - 1);
+  render();
+});
+
+document.getElementById("nextWeek").addEventListener("click", () => {
+  select.value = Math.min(8, Number(select.value) + 1);
+  render();
+});
+
+select.addEventListener("change", render);
+
+document.getElementById("resetWeek").addEventListener("click", () => {
+  if (confirm("Reset all checkmarks for this week?")) {
+    localStorage.removeItem(storageKey());
+    render();
+  }
+});
+
+document.getElementById("exportProgress").addEventListener("click", () => {
+  const data = {
+    program: "Webhead Training Phase 1",
+    exportedAt: new Date().toISOString(),
+    weeks: {}
+  };
+
+  for (let week = 1; week <= 8; week++) {
+    try {
+      data.weeks[week] = JSON.parse(
+        localStorage.getItem("webheadWeek" + week) || "[]"
+      );
+    } catch {
+      data.weeks[week] = [];
+    }
+  }
+
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "webhead-training-progress.json";
+  link.click();
+  URL.revokeObjectURL(url);
+});
+
+render();
+</script>
+
+</body>
+</html>
